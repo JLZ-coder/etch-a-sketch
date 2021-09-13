@@ -1,0 +1,48 @@
+:root {
+    --rows: 16;
+    --columns: 16;
+}
+
+html, body {
+    height: calc(100% - 1px * 2);
+    width: calc(100% - 1px * 2);
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    margin: 0px;
+    padding: 0px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+
+#container {
+    height: 100%;
+    width: auto;
+    display: grid;
+    grid-template-columns: repeat(var(--columns), auto);
+    grid-template-rows: repeat(var(--rows), auto);
+    border: 1px solid black;
+    margin-left: 1px;
+    aspect-ratio: 1;
+}
+
+#container div {
+    aspect-ratio: 1;
+    user-select: none;
+}
+
+.painted {
+    background-color: gray;
+}
+
+.erased {
+    background-color: white;
+}
+
+#reset {
+    aspect-ratio: 1;
+}
+
+.buttonOn {
+    border: 3px solid greenyellow;
+    box-shadow: 0px 0px 3px greenyellow;
+}
