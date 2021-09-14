@@ -73,7 +73,18 @@ function createDivs() {
     gridOfDivs.push(currentX);
   }
 
-  changeMode(currentMode);
+  for (let i=0; i < DIMENSIONS[0]; i++) {
+    for (let j=0; j < DIMENSIONS[1]; j++) {
+        gridOfDivs[i][j].addEventListener("mousedown", function(e) {
+            interactWithDiv(this);
+        });
+        gridOfDivs[i][j].addEventListener("mouseenter", function(e) {
+          if (e.buttons > 0)
+            interactWithDiv(this);
+        });
+        gridOfDivs[i][j].style["background-color"] = "#ffffff";
+    }
+  }
 
   for (let i=0; i < DIMENSIONS[0]; i++) {
     for (let j=0; j < DIMENSIONS[1]; j++) {
@@ -90,6 +101,33 @@ function resetDivs() {
   }
 }
 
+function interactWithDiv(div) {
+  if (currentMode != "shadow") {
+    div.style["filter"] = "";
+  }
+  
+  switch(currentMode) {
+    case "normal": {
+      paintDiv(div);
+      break;
+    }
+    case "eraser": {
+      eraseDiv(div);
+      break;
+    }
+    case "shadow": {
+      addShadowDiv(div);
+      break;
+    }
+    case "rainbow": {
+      rainbowDiv(div);
+      break;
+    }
+    default: {
+    }
+  }
+}
+
 function paintDiv(div) {
   div.style["background-color"] = currentColor;
 }
@@ -99,7 +137,14 @@ function eraseDiv(div) {
 }
 
 function addShadowDiv(div) {
-  console.log(div.style["background-color"]);
+  let fullString = div.style["filter"];
+  
+  if (fullString == "") {
+    div.style["filter"] = `brightness( ${1 - 0.1} )`;
+  }
+  else {
+    div.style["filter"] = `brightness( ${div.style["filter"].slice(11, -1) - 0.1} )`;;
+  }
 }
 
 function rainbowDiv(div) {
@@ -121,42 +166,6 @@ function resizePad(squaresPerSide) {
 
 function changeMode(newMode) {
   currentMode = newMode;
-  let interactWithDiv = false;
-
-  switch(newMode) {
-    case "normal": {
-      interactWithDiv = paintDiv;
-      break;
-    }
-    case "eraser": {
-      interactWithDiv = eraseDiv;
-      break;
-    }
-    case "shadow": {
-      interactWithDiv = addShadowDiv;
-      break;
-    }
-    case "rainbow": {
-      interactWithDiv = rainbowDiv;
-      break;
-    }
-    default: {
-    }
-  }
-
-  if (interactWithDiv) {
-    for (let i=0; i < DIMENSIONS[0]; i++) {
-      for (let j=0; j < DIMENSIONS[1]; j++) {
-          gridOfDivs[i][j].addEventListener("mousedown", function(e) {
-              interactWithDiv(this);
-          });
-          gridOfDivs[i][j].addEventListener("mouseenter", function(e) {
-            if (e.buttons > 0)
-              interactWithDiv(this);
-          });
-      }
-    }
-  }
 }
 
 function deactivateAllButtons() {
