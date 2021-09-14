@@ -78,3 +78,11 @@ html, body {
 .erased {
     background-color: white;
 }
+
+footer {
+    padding: 5px;
+    border-radius: 3px;
+    background-color: #d57933;
+    position: absolute;
+    bottom: 0;
+}
