@@ -7,8 +7,19 @@
         <link rel="stylesheet" href="style.css">
     </head>
     <body>
-        <button id="reset">RESET</button>
-        <button id="eraser">ERASER</button>
+        <div id="leftPanel" class="panel">
+            <h1>Etch-a-Sketch</h1>
+            <div id="buttonsDiv" class="panel">
+                <div id="colorPanel">
+                    <button id="normal" class="buttonOn">PAINT</button>
+                    <input id="currentColorInput" type="color"></input>
+                </div>
+                <button id="eraser">ERASER</button>
+                <button id="shadow">ADD SHADOW</button>
+                <button id="rainbow">RAINBOW</button>
+                <button id="reset">RESET</button>
+            </div>
+        </div>
         <div id="container">
         </div>
     </body>
