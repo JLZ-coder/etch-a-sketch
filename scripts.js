@@ -19,6 +19,7 @@ const colorPicker = document.querySelector("#currentColorInput");
 colorPicker.addEventListener("input", function(e) {
   currentColor = e.target.value;
   root.style.setProperty("--color", currentColor);
+  console.log(e);
 });
 
 const eraserButton = document.querySelector("#eraser");
@@ -86,6 +87,7 @@ function createDivs() {
           if (e.buttons > 0)
             paintDiv(this);
         });
+        gridOfDivs[i][j].style["background-color"] = "#ffffff";
     }
   }
 
@@ -110,6 +112,15 @@ function paintDiv(div) {
 
 function eraseDiv(div) {
   div.style["background-color"] = "#ffffff";
+}
+
+function addShadowDiv(div) {
+  console.log(div.style["background-color"]);
+}
+
+function rainbowDiv(div) {
+  const randomNumber = Math.floor(Math.random() * 256**3);
+  div.style["background-color"] = "#" + randomNumber.toString(16);
 }
 
 function resetPad(squaresPerSide) {
@@ -139,11 +150,11 @@ function changeMode(newMode) {
         break;
       }
       case "shadow": {
-        interactWithDiv = paintDiv;
+        interactWithDiv = addShadowDiv;
         break;
       }
       case "rainbow": {
-        interactWithDiv = paintDiv;
+        interactWithDiv = rainbowDiv;
         break;
       }
       default: {
