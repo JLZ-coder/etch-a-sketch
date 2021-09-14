@@ -1,6 +1,6 @@
 const DIMENSIONS = [16, 16];
 let gridOfDivs = [];
-let currentMode = "NORMAL";
+let currentMode = "normal";
 let currentColor = "#000000";
 
 const root = document.querySelector(":root");
@@ -45,28 +45,23 @@ rainbowButton.addEventListener("click", function() {
 
 const resetButton = document.querySelector("#reset");
 resetButton.addEventListener("click", () => {
-  let newSquaresPerSide = prompt("How many squares per side? (same as now by default)");
-
-  if (newSquaresPerSide != undefined) {
-    if (newSquaresPerSide.trim() == "") {
-      newSquaresPerSide = DIMENSIONS[0];
-    }
-    
-    if (!isNaN(Number(newSquaresPerSide))) {
-      if (Number(newSquaresPerSide) > 0 && Number(newSquaresPerSide) <= 100) {
-        resetPad(Number(newSquaresPerSide));
-      }
-      else {
-        alert("ERROR: Enter a correct number (Max: 100)");
-      }
-    }
-    else {
-      alert("ERROR: Enter a correct number");
-    }
-  }
+  resetDivs(DIMENSIONS[0]);
 });
 
 const buttonList = document.querySelectorAll("button");
+
+
+const sliderGridSize = document.querySelector("#sliderGridSize");
+const gridSizeDiv = document.querySelector("#gridSizeDiv");
+sliderGridSize.addEventListener("change", function() {
+  gridSizeDiv.textContent = `Grid Size ${this.value}x${this.value}`;
+  resizePad(this.value);
+})
+sliderGridSize.addEventListener("mousemove", function() {
+  gridSizeDiv.textContent = `Grid Size ${this.value}x${this.value}`;
+})
+
+gridSizeDiv.textContent = `Grid Size ${DIMENSIONS[0]}x${DIMENSIONS[1]}`;
 
 function createDivs() {
   gridOfDivs = [];
@@ -78,18 +73,7 @@ function createDivs() {
     gridOfDivs.push(currentX);
   }
 
-  for (let i=0; i < DIMENSIONS[0]; i++) {
-    for (let j=0; j < DIMENSIONS[1]; j++) {
-        gridOfDivs[i][j].addEventListener("mousedown", function(e) {
-          paintDiv(this);
-        });
-        gridOfDivs[i][j].addEventListener("mouseenter", function(e) {
-          if (e.buttons > 0)
-            paintDiv(this);
-        });
-        gridOfDivs[i][j].style["background-color"] = "#ffffff";
-    }
-  }
+  changeMode(currentMode);
 
   for (let i=0; i < DIMENSIONS[0]; i++) {
     for (let j=0; j < DIMENSIONS[1]; j++) {
@@ -101,7 +85,7 @@ function createDivs() {
 function resetDivs() {
   for (let i=0; i < DIMENSIONS[0]; i++) {
     for (let j=0; j < DIMENSIONS[1]; j++) {
-        gridOfDivs[i][j].classList.remove("painted");
+        eraseDiv(gridOfDivs[i][j]);
     }
   }
 }
@@ -123,7 +107,7 @@ function rainbowDiv(div) {
   div.style["background-color"] = "#" + randomNumber.toString(16);
 }
 
-function resetPad(squaresPerSide) {
+function resizePad(squaresPerSide) {
   DIMENSIONS[0] = squaresPerSide;
   DIMENSIONS[1] = squaresPerSide;
 
@@ -136,42 +120,40 @@ function resetPad(squaresPerSide) {
 }
 
 function changeMode(newMode) {
-  if (currentMode != newMode) {
-    currentMode = newMode;
-    let interactWithDiv = false;
+  currentMode = newMode;
+  let interactWithDiv = false;
 
-    switch(newMode) {
-      case "normal": {
-        interactWithDiv = paintDiv;
-        break;
-      }
-      case "eraser": {
-        interactWithDiv = eraseDiv;
-        break;
-      }
-      case "shadow": {
-        interactWithDiv = addShadowDiv;
-        break;
-      }
-      case "rainbow": {
-        interactWithDiv = rainbowDiv;
-        break;
-      }
-      default: {
-      }
+  switch(newMode) {
+    case "normal": {
+      interactWithDiv = paintDiv;
+      break;
     }
+    case "eraser": {
+      interactWithDiv = eraseDiv;
+      break;
+    }
+    case "shadow": {
+      interactWithDiv = addShadowDiv;
+      break;
+    }
+    case "rainbow": {
+      interactWithDiv = rainbowDiv;
+      break;
+    }
+    default: {
+    }
+  }
 
-    if (interactWithDiv) {
-      for (let i=0; i < DIMENSIONS[0]; i++) {
-        for (let j=0; j < DIMENSIONS[1]; j++) {
-            gridOfDivs[i][j].addEventListener("mousedown", function(e) {
-                interactWithDiv(this);
-            });
-            gridOfDivs[i][j].addEventListener("mouseenter", function(e) {
-              if (e.buttons > 0)
-                interactWithDiv(this);
-            });
-        }
+  if (interactWithDiv) {
+    for (let i=0; i < DIMENSIONS[0]; i++) {
+      for (let j=0; j < DIMENSIONS[1]; j++) {
+          gridOfDivs[i][j].addEventListener("mousedown", function(e) {
+              interactWithDiv(this);
+          });
+          gridOfDivs[i][j].addEventListener("mouseenter", function(e) {
+            if (e.buttons > 0)
+              interactWithDiv(this);
+          });
       }
     }
   }
