@@ -134,6 +134,7 @@ function paintDiv(div) {
 
 function eraseDiv(div) {
   div.style["background-color"] = "#ffffff";
+  div.style["filter"] = "";
 }
 
 function addShadowDiv(div) {
